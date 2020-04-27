@@ -1,7 +1,7 @@
 {
     "name": "webedia/bitbag-vuestorefront-plugin",
     "type": "sylius-plugin",
-    "keywords": ["sylius", "sylius-plugin", "sylius vuestorefront"],
+    "keywords": ["sylius", "sylius-plugin", "vuestorefront"],
     "description": "BitBag VueStorefront bridge for Sylius custom by Webedia.",
     "license": "MIT",
     "require": {
