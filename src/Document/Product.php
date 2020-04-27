@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusVueStorefrontPlugin\Document;
 
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\Category;
+use BitBag\SyliusVueStorefrontPlugin\Document\Product\ConfigurableAttribute;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\ConfigurableChildren;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\ConfigurableOptions;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\Details;
@@ -21,6 +22,7 @@ use BitBag\SyliusVueStorefrontPlugin\Document\Product\Price;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\ProductLinks;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\Stock;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\StockItem;
+use BitBag\SyliusVueStorefrontPlugin\Document\Product\Review;
 
 class Product implements ProductInterface
 {
@@ -54,6 +56,12 @@ class Product implements ProductInterface
     /** @var StockItem */
     private $stockItem;
 
+    /** @var ConfigurableAttribute */
+    private $attributes;
+
+    /**@var Review */
+    private $review;
+
     public function __construct(
         int $documentId,
         Details $details,
@@ -64,7 +72,9 @@ class Product implements ProductInterface
         ?ConfigurableOptions $configurableOptions,
         ProductLinks $productLinks,
         Price $price,
-        StockItem $stockItem
+        StockItem $stockItem,
+        ConfigurableAttribute $attributes,
+        Review $review
     ) {
         $this->documentId = $documentId;
         $this->stock = $stock;
@@ -76,6 +86,8 @@ class Product implements ProductInterface
         $this->productLinks = $productLinks;
         $this->price = $price;
         $this->stockItem = $stockItem;
+        $this->attributes = $attributes;
+        $this->review = $review;
     }
 
     public function getDocumentId(): int
@@ -96,7 +108,9 @@ class Product implements ProductInterface
             $this->details->isConfigurableProduct() ? $this->configurableChildren->toArray() : [],
             $this->details->isConfigurableProduct() ? $this->configurableOptions->toArray() : [],
             $this->productLinks->toArray(),
-            $this->price->toArray()
+            $this->price->toArray(),
+            $this->attributes->toArray(),
+            $this->review->toArray()
         );
     }
 }

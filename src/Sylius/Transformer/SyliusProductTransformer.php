@@ -16,8 +16,10 @@ use BitBag\SyliusVueStorefrontPlugin\Document\Product;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ImagesToMediaGalleryTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\InventoryToStockTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductAssociationsToLinksTransformerInterface;
+use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductAttributesTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductDetailsTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductOptionsToConfigurableOptionsTransformerInterface;
+use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductReviewTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductVariantPricesTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\ProductVariantsToConfigurableChildrenTransformerInterface;
 use BitBag\SyliusVueStorefrontPlugin\Sylius\Transformer\SyliusProduct\TaxonsToCategoriesTransformerInterface;
@@ -49,6 +51,12 @@ final class SyliusProductTransformer implements SyliusProductTransformerInterfac
     /** @var ProductVariantPricesTransformerInterface */
     private $productVariantPricesTransformer;
 
+    /** @var ProductAttributesTransformerInterface */
+    private $productAttributesTransformer;
+
+    /**@var ProductReviewTransformerInterface*/
+    private $productReviewTransformer;
+
     public function __construct(
         ProductDetailsTransformerInterface $productDetailsTransformer,
         InventoryToStockTransformerInterface $inventoryTransformer,
@@ -57,7 +65,9 @@ final class SyliusProductTransformer implements SyliusProductTransformerInterfac
         ProductVariantsToConfigurableChildrenTransformerInterface $productVariantsTransformer,
         ProductOptionsToConfigurableOptionsTransformerInterface $productOptionsTransformer,
         ProductAssociationsToLinksTransformerInterface $productAssociationsTransformer,
-        ProductVariantPricesTransformerInterface $productVariantPricesTransformer
+        ProductVariantPricesTransformerInterface $productVariantPricesTransformer,
+        ProductAttributesTransformerInterface $productAttributesTransformer,
+        ProductReviewTransformerInterface $productReviewTransformer
     ) {
         $this->productDetailsTransformer = $productDetailsTransformer;
         $this->inventoryTransformer = $inventoryTransformer;
@@ -67,6 +77,8 @@ final class SyliusProductTransformer implements SyliusProductTransformerInterfac
         $this->productOptionsTransformer = $productOptionsTransformer;
         $this->productAssociationsTransformer = $productAssociationsTransformer;
         $this->productVariantPricesTransformer = $productVariantPricesTransformer;
+        $this->productAttributesTransformer = $productAttributesTransformer;
+        $this->productReviewTransformer = $productReviewTransformer;
     }
 
     public function transform(ProductInterface $syliusProduct): Product
@@ -87,6 +99,8 @@ final class SyliusProductTransformer implements SyliusProductTransformerInterfac
         $productLinks = $this->productAssociationsTransformer->transform($syliusProduct->getAssociations());
         $price = $this->productVariantPricesTransformer->transform($syliusProduct->getVariants()->first());
         $stockItem = new Product\StockItem();
+        $attributes = $this->productAttributesTransformer->transform($syliusProduct);
+        $reviewRating = $this->productReviewTransformer->transform($syliusProduct);
 
         return new Product(
             $syliusProduct->getId(),
@@ -98,7 +112,9 @@ final class SyliusProductTransformer implements SyliusProductTransformerInterfac
             $configurableOptions,
             $productLinks,
             $price,
-            $stockItem
+            $stockItem,
+            $attributes,
+            $reviewRating
         );
     }
 }

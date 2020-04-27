@@ -51,10 +51,10 @@ final class CreateCartHandler implements MessageHandlerInterface
         $channel = $this->channelProvider->provide();
         $customer = $this->customerProvider->provide($createCart->cartId());
 
-        if (strpos($customer->getEmail(), '@guest.example') === false) {
-            $cart = $this->cartRepository->findLatestCartByChannelAndCustomer($channel, $customer);
-            $cart->setTokenValue($createCart->cartId());
+        $cart = $this->cartRepository->findLatestCartByChannelAndCustomer($channel, $customer);
 
+        if ($cart) {
+            $cart->setTokenValue($createCart->cartId());
             return;
         }
 

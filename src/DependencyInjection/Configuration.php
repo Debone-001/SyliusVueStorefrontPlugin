@@ -74,7 +74,7 @@ final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('bitbag_sylius_vue_storefront_plugin');
+        $treeBuilder = new TreeBuilder('webedia_bitbag_sylius_vue_storefront_plugin');
 
         $rootNode = $treeBuilder->getRootNode();
 

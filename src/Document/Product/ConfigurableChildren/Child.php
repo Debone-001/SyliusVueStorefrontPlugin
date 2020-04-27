@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusVueStorefrontPlugin\Document\Product\ConfigurableChildren;
 
+use BitBag\SyliusVueStorefrontPlugin\Document\Product\ConfigurableChildrenAttribute;
 use BitBag\SyliusVueStorefrontPlugin\Document\Product\Price;
 
 class Child implements \JsonSerializable
@@ -44,16 +45,21 @@ class Child implements \JsonSerializable
     /** @var array */
     private $customAttributes;
 
+    /** @var array */
+    private $productVariantValues;
+
     public function __construct(
         Price $price,
         string $name,
         string $sku,
-        array $customAttributes
+        array $customAttributes,
+        ConfigurableChildrenAttribute $productVariantValues = null
     ) {
         $this->price = $price;
         $this->name = $name;
         $this->sku = $sku;
         $this->customAttributes = $customAttributes;
+        $this->productVariantValues = $productVariantValues;
     }
 
     public function jsonSerialize(): array
@@ -64,7 +70,8 @@ class Child implements \JsonSerializable
                 self::NAME => $this->name,
                 self::SKU => $this->sku,
             ],
-            $this->customAttributes
+            $this->customAttributes,
+            $this->productVariantValues ? $this->productVariantValues->toArray(): []
         );
     }
 }

@@ -25,6 +25,9 @@ final class ProductVariantsToConfigurableChildrenTransformer implements ProductV
     /** @var ProductVariantOptionValuesToCustomAttributesTransformerInterface */
     private $productVariantOptionValuesToCustomAttributesTransformer;
 
+    /**@var ProductVariantAttributeValueTransformerInterface */
+    private $productVariantAttributeValuesTransformer;
+
     public function __construct(
         ProductVariantPricesTransformerInterface $productVariantPricesTransformer,
         ProductVariantOptionValuesToCustomAttributesTransformerInterface $productVariantOptionValuesToCustomAttributesTransformer
@@ -43,7 +46,8 @@ final class ProductVariantsToConfigurableChildrenTransformer implements ProductV
                 $this->productVariantPricesTransformer->transform($productVariant),
                 $productVariant->getName(),
                 $productVariant->getCode(),
-                $this->productVariantOptionValuesToCustomAttributesTransformer->transform($productVariant)
+                $this->productVariantOptionValuesToCustomAttributesTransformer->transform($productVariant),
+                $this->productVariantAttributeValuesTransformer->transform($productVariant)
             );
         }
 
